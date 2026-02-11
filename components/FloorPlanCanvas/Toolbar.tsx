@@ -31,37 +31,37 @@ export default function Toolbar({
     const isActive = (mode: DrawMode) => drawMode === mode;
 
     const toolButtonClass = (mode: DrawMode) => `
-        group relative flex items-center gap-2.5 px-5 py-3 rounded-xl font-medium 
+        group relative flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-medium text-sm
         transition-all duration-200 overflow-hidden
         ${isActive(mode)
-            ? 'bg-gradient-primary text-white shadow-lg shadow-blue-500/30 scale-105'
-            : 'bg-white/80 text-slate-700 hover:bg-white hover:shadow-md border border-slate-200/50'
+            ? 'bg-gradient-primary text-white shadow-md shadow-blue-500/30 scale-105'
+            : 'bg-white/80 text-slate-700 hover:bg-white hover:shadow-sm border border-slate-200/50'
         }
     `;
 
     const actionButtonClass = (variant: 'danger' | 'secondary') => `
-        flex items-center gap-2.5 px-5 py-3 rounded-xl font-medium 
+        flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-medium text-sm
         transition-all duration-200 hover:scale-105
         ${variant === 'danger'
-            ? 'bg-gradient-to-r from-red-500 to-red-600 text-white hover:shadow-lg hover:shadow-red-500/30'
-            : 'bg-white/80 text-slate-700 hover:bg-white hover:shadow-md border border-slate-200/50'
+            ? 'bg-gradient-to-r from-red-500 to-red-600 text-white hover:shadow-md hover:shadow-red-500/30'
+            : 'bg-white/80 text-slate-700 hover:bg-white hover:shadow-sm border border-slate-200/50'
         }
     `;
 
     return (
-        <div className="glass-strong border-b border-white/20 shadow-xl">
-            <div className="px-8 py-5">
+        <div className="glass-strong border-b border-white/20 shadow-lg">
+            <div className="px-5 py-3">
                 {/* Header */}
-                <div className="flex items-center justify-between mb-6">
-                    <div className="flex items-center gap-3">
-                        <div className="p-2.5 bg-gradient-primary rounded-xl shadow-lg">
-                            <Layers className="w-6 h-6 text-white" />
+                <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                        <div className="p-1.5 bg-gradient-primary rounded-lg shadow-md">
+                            <Layers className="w-4 h-4 text-white" />
                         </div>
                         <div>
-                            <h1 className="text-2xl font-bold text-slate-900">
+                            <h1 className="text-lg font-bold text-slate-900">
                                 Floor Plan Designer
                             </h1>
-                            <p className="text-sm text-slate-500 mt-0.5">
+                            <p className="text-xs text-slate-500 mt-0">
                                 Professional floor planning tool
                             </p>
                         </div>
@@ -69,18 +69,18 @@ export default function Toolbar({
                 </div>
 
                 {/* Tools */}
-                <div className="flex items-center gap-4 flex-wrap">
+                <div className="flex items-center gap-2.5 flex-wrap">
                     {/* Drawing Tools Group */}
-                    <div className="flex items-center gap-2 p-2 bg-slate-50/50 rounded-2xl border border-slate-200/50 backdrop-blur-sm">
+                    <div className="flex items-center gap-1.5 p-1.5 bg-slate-50/50 rounded-xl border border-slate-200/50 backdrop-blur-sm">
                         <button
                             onClick={() => onModeChange('select')}
                             className={toolButtonClass('select')}
                             title="Select and move objects (V)"
                         >
-                            <MousePointer2 size={18} />
+                            <MousePointer2 size={14} />
                             <span className="font-semibold">Select</span>
                             {isActive('select') && (
-                                <div className="absolute inset-0 bg-white/20 rounded-xl animate-pulse-glow"></div>
+                                <div className="absolute inset-0 bg-white/20 rounded-lg animate-pulse-glow"></div>
                             )}
                         </button>
 
@@ -89,10 +89,10 @@ export default function Toolbar({
                             className={toolButtonClass('wall')}
                             title="Draw walls (W)"
                         >
-                            <Minus size={18} />
+                            <Minus size={14} />
                             <span className="font-semibold">Wall</span>
                             {isActive('wall') && (
-                                <div className="absolute inset-0 bg-white/20 rounded-xl animate-pulse-glow"></div>
+                                <div className="absolute inset-0 bg-white/20 rounded-lg animate-pulse-glow"></div>
                             )}
                         </button>
 
@@ -101,10 +101,10 @@ export default function Toolbar({
                             className={toolButtonClass('room')}
                             title="Draw rooms (R)"
                         >
-                            <Square size={18} />
+                            <Square size={14} />
                             <span className="font-semibold">Room</span>
                             {isActive('room') && (
-                                <div className="absolute inset-0 bg-white/20 rounded-xl animate-pulse-glow"></div>
+                                <div className="absolute inset-0 bg-white/20 rounded-lg animate-pulse-glow"></div>
                             )}
                         </button>
 
@@ -113,10 +113,10 @@ export default function Toolbar({
                             className={toolButtonClass('camera')}
                             title="Add security camera (C)"
                         >
-                            <Camera size={18} />
+                            <Camera size={14} />
                             <span className="font-semibold">Camera</span>
                             {isActive('camera') && (
-                                <div className="absolute inset-0 bg-white/20 rounded-xl animate-pulse-glow"></div>
+                                <div className="absolute inset-0 bg-white/20 rounded-lg animate-pulse-glow"></div>
                             )}
                         </button>
 
@@ -125,10 +125,10 @@ export default function Toolbar({
                             className={toolButtonClass('door')}
                             title="Draw door (D)"
                         >
-                            <DoorOpen size={18} />
+                            <DoorOpen size={14} />
                             <span className="font-semibold">Door</span>
                             {isActive('door') && (
-                                <div className="absolute inset-0 bg-white/20 rounded-xl animate-pulse-glow"></div>
+                                <div className="absolute inset-0 bg-white/20 rounded-lg animate-pulse-glow"></div>
                             )}
                         </button>
                     </div>
@@ -137,13 +137,13 @@ export default function Toolbar({
                     <div className="flex-1"></div>
 
                     {/* Action Buttons */}
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2">
                         <button
                             onClick={onDeleteSelected}
                             className={actionButtonClass('danger')}
                             title="Delete selected object (Del)"
                         >
-                            <Trash2 size={18} />
+                            <Trash2 size={14} />
                             <span className="font-semibold">Delete</span>
                         </button>
 
@@ -152,7 +152,7 @@ export default function Toolbar({
                             className={actionButtonClass('secondary')}
                             title="Clear entire canvas"
                         >
-                            <RotateCcw size={18} />
+                            <RotateCcw size={14} />
                             <span className="font-semibold">Clear All</span>
                         </button>
                     </div>
