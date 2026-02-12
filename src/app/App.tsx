@@ -33,7 +33,7 @@ export default function App() {
 
     setElements((prev) =>
       prev.map((el) => {
-        if (el.id === selectedElementId && el.type !== 'room') {
+        if (el.id === selectedElementId && 'rotation' in el) {
           return {
             ...el,
             rotation: (el.rotation + 45) % 360,
@@ -56,6 +56,12 @@ export default function App() {
       switch (e.key.toLowerCase()) {
         case 'v':
           setSelectedTool('select');
+          break;
+        case 'l':
+          setSelectedTool('wall');
+          break;
+        case 'p':
+          setSelectedTool('pencil');
           break;
         case 'r':
           if (!e.metaKey && !e.ctrlKey) {
@@ -135,11 +141,21 @@ export default function App() {
             selectedElementId={selectedElementId}
             onSelectedElementChange={setSelectedElementId}
           />
-          
+
           {/* Legend */}
           <div className="absolute bottom-4 left-4 bg-slate-900/90 backdrop-blur border border-slate-700 rounded-lg p-4">
             <h4 className="text-white text-sm mb-3">Legend</h4>
             <div className="space-y-2 text-xs">
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-1 bg-slate-500 rounded"></div>
+                <span className="text-slate-300">Wall</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <svg width="24" height="12" className="flex-shrink-0">
+                  <path d="M 2 6 Q 8 2, 12 6 T 22 6" stroke="#60a5fa" strokeWidth="2" fill="none" strokeLinecap="round" />
+                </svg>
+                <span className="text-slate-300">Pencil</span>
+              </div>
               <div className="flex items-center gap-2">
                 <div className="w-6 h-6 border-2 border-blue-500 bg-blue-500/10 rounded"></div>
                 <span className="text-slate-300">Room</span>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Square, DoorOpen, Maximize2, Camera, MousePointer2, Hand, Trash2, RotateCw } from 'lucide-react';
+import { Square, DoorOpen, Maximize2, Camera, MousePointer2, Hand, Trash2, RotateCw, Minus, Pencil } from 'lucide-react';
 import { Tool, FloorPlanElement } from './FloorPlanCanvas';
 import { Button } from './ui/button';
 import { Separator } from './ui/separator';
@@ -18,6 +18,8 @@ interface ToolbarProps {
 export function Toolbar({ selectedTool, onToolChange, onClear, onRotateSelected, hasElements, elements, onLoadElements }: ToolbarProps) {
   const tools = [
     { id: 'select' as Tool, icon: MousePointer2, label: 'Select', shortcut: 'V' },
+    { id: 'wall' as Tool, icon: Minus, label: 'Wall', shortcut: 'L' },
+    { id: 'pencil' as Tool, icon: Pencil, label: 'Pencil', shortcut: 'P' },
     { id: 'room' as Tool, icon: Square, label: 'Room', shortcut: 'R' },
     { id: 'door' as Tool, icon: DoorOpen, label: 'Door', shortcut: 'D' },
     { id: 'window' as Tool, icon: Maximize2, label: 'Window', shortcut: 'W' },
@@ -36,11 +38,10 @@ export function Toolbar({ selectedTool, onToolChange, onClear, onRotateSelected,
               variant={selectedTool === tool.id ? 'default' : 'ghost'}
               size="sm"
               onClick={() => onToolChange(tool.id)}
-              className={`relative ${
-                selectedTool === tool.id
+              className={`relative ${selectedTool === tool.id
                   ? 'bg-blue-600 hover:bg-blue-700 text-white'
                   : 'text-slate-300 hover:text-white hover:bg-slate-800'
-              }`}
+                }`}
               title={`${tool.label} (${tool.shortcut})`}
             >
               <Icon className="h-4 w-4" />

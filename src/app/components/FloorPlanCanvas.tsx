@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 
-export type Tool = 'select' | 'room' | 'door' | 'window' | 'camera' | 'pan';
+export type Tool = 'select' | 'room' | 'door' | 'window' | 'camera' | 'wall' | 'pencil' | 'pan';
 
 export interface Point {
   x: number;
@@ -40,7 +40,25 @@ export interface Camera {
   rotation: number;
 }
 
-export type FloorPlanElement = Room | Door | Window | Camera;
+export interface Wall {
+  id: string;
+  type: 'wall';
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+  thickness: number;
+}
+
+export interface PencilPath {
+  id: string;
+  type: 'pencil';
+  points: Point[];
+  color: string;
+  lineWidth: number;
+}
+
+export type FloorPlanElement = Room | Door | Window | Camera | Wall | PencilPath;
 
 interface FloorPlanCanvasProps {
   selectedTool: Tool;
@@ -60,6 +78,7 @@ export function FloorPlanCanvas({ selectedTool, elements, onElementsChange, sele
   const [isDrawing, setIsDrawing] = useState(false);
   const [startPoint, setStartPoint] = useState<Point | null>(null);
   const [currentPoint, setCurrentPoint] = useState<Point | null>(null);
+  const [pencilPoints, setPencilPoints] = useState<Point[]>([]);
   const [selectedElement, setSelectedElement] = useState<string | null>(selectedElementId || null);
   const [panOffset, setPanOffset] = useState<Point>({ x: 0, y: 0 });
   const [isPanning, setIsPanning] = useState(false);
@@ -110,6 +129,10 @@ export function FloorPlanCanvas({ selectedTool, elements, onElementsChange, sele
         drawWindow(ctx, element, isSelected);
       } else if (element.type === 'camera') {
         drawCamera(ctx, element, isSelected);
+      } else if (element.type === 'wall') {
+        drawWall(ctx, element, isSelected);
+      } else if (element.type === 'pencil') {
+        drawPencilPath(ctx, element, isSelected);
       }
     });
 
@@ -125,8 +148,38 @@ export function FloorPlanCanvas({ selectedTool, elements, onElementsChange, sele
       ctx.strokeRect(startPoint.x, startPoint.y, width, height);
       ctx.fillRect(startPoint.x, startPoint.y, width, height);
       ctx.setLineDash([]);
+    } else if (isDrawing && startPoint && currentPoint && selectedTool === 'wall') {
+      ctx.strokeStyle = '#64748b';
+      ctx.lineWidth = 8;
+      ctx.lineCap = 'round';
+      ctx.globalAlpha = 0.7;
+      ctx.setLineDash([5, 5]);
+
+      ctx.beginPath();
+      ctx.moveTo(startPoint.x, startPoint.y);
+      ctx.lineTo(currentPoint.x, currentPoint.y);
+      ctx.stroke();
+
+      ctx.setLineDash([]);
+      ctx.globalAlpha = 1;
+    } else if (isDrawing && selectedTool === 'pencil' && pencilPoints.length > 1) {
+      ctx.strokeStyle = '#60a5fa';
+      ctx.lineWidth = 2;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.globalAlpha = 0.8;
+
+      ctx.beginPath();
+      ctx.moveTo(pencilPoints[0].x, pencilPoints[0].y);
+
+      for (let i = 1; i < pencilPoints.length; i++) {
+        ctx.lineTo(pencilPoints[i].x, pencilPoints[i].y);
+      }
+
+      ctx.stroke();
+      ctx.globalAlpha = 1;
     }
-  }, [elements, selectedElement, isDrawing, startPoint, currentPoint, selectedTool, panOffset]);
+  }, [elements, selectedElement, isDrawing, startPoint, currentPoint, selectedTool, panOffset, pencilPoints]);
 
   const drawRoom = (ctx: CanvasRenderingContext2D, room: Room, isSelected: boolean) => {
     ctx.strokeStyle = isSelected ? '#60a5fa' : '#3b82f6';
@@ -238,6 +291,58 @@ export function FloorPlanCanvas({ selectedTool, elements, onElementsChange, sele
     ctx.restore();
   };
 
+  const drawWall = (ctx: CanvasRenderingContext2D, wall: Wall, isSelected: boolean) => {
+    ctx.strokeStyle = isSelected ? '#60a5fa' : '#64748b';
+    ctx.lineWidth = wall.thickness;
+    ctx.lineCap = 'round';
+
+    ctx.beginPath();
+    ctx.moveTo(wall.x1 + panOffset.x, wall.y1 + panOffset.y);
+    ctx.lineTo(wall.x2 + panOffset.x, wall.y2 + panOffset.y);
+    ctx.stroke();
+
+    // Draw endpoints for selected wall
+    if (isSelected) {
+      ctx.fillStyle = '#60a5fa';
+      ctx.beginPath();
+      ctx.arc(wall.x1 + panOffset.x, wall.y1 + panOffset.y, 4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(wall.x2 + panOffset.x, wall.y2 + panOffset.y, 4, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  };
+
+  const drawPencilPath = (ctx: CanvasRenderingContext2D, path: PencilPath, isSelected: boolean) => {
+    if (path.points.length < 2) return;
+
+    ctx.strokeStyle = isSelected ? '#60a5fa' : path.color;
+    ctx.lineWidth = isSelected ? path.lineWidth + 1 : path.lineWidth;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+
+    // Add glow effect for selected paths
+    if (isSelected) {
+      ctx.shadowColor = '#60a5fa';
+      ctx.shadowBlur = 8;
+    }
+
+    ctx.beginPath();
+    ctx.moveTo(path.points[0].x + panOffset.x, path.points[0].y + panOffset.y);
+
+    for (let i = 1; i < path.points.length; i++) {
+      ctx.lineTo(path.points[i].x + panOffset.x, path.points[i].y + panOffset.y);
+    }
+
+    ctx.stroke();
+
+    // Reset shadow
+    if (isSelected) {
+      ctx.shadowColor = 'transparent';
+      ctx.shadowBlur = 0;
+    }
+  };
+
   const snapToGrid = (point: Point): Point => {
     return {
       x: Math.round(point.x / GRID_SIZE) * GRID_SIZE,
@@ -275,7 +380,81 @@ export function FloorPlanCanvas({ selectedTool, elements, onElementsChange, sele
             point.y >= el.y + panOffset.y &&
             point.y <= el.y + panOffset.y + el.height
           );
+        } else if (el.type === 'wall') {
+          // Point-to-line distance calculation
+          const x1 = el.x1 + panOffset.x;
+          const y1 = el.y1 + panOffset.y;
+          const x2 = el.x2 + panOffset.x;
+          const y2 = el.y2 + panOffset.y;
+
+          const A = point.x - x1;
+          const B = point.y - y1;
+          const C = x2 - x1;
+          const D = y2 - y1;
+
+          const dot = A * C + B * D;
+          const lenSq = C * C + D * D;
+          const param = lenSq !== 0 ? dot / lenSq : -1;
+
+          let xx, yy;
+
+          if (param < 0) {
+            xx = x1;
+            yy = y1;
+          } else if (param > 1) {
+            xx = x2;
+            yy = y2;
+          } else {
+            xx = x1 + param * C;
+            yy = y1 + param * D;
+          }
+
+          const dx = point.x - xx;
+          const dy = point.y - yy;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          return distance < el.thickness / 2 + 5;
+        } else if (el.type === 'pencil') {
+          // Check if near any segment of the path
+          for (let i = 0; i < el.points.length - 1; i++) {
+            const x1 = el.points[i].x + panOffset.x;
+            const y1 = el.points[i].y + panOffset.y;
+            const x2 = el.points[i + 1].x + panOffset.x;
+            const y2 = el.points[i + 1].y + panOffset.y;
+
+            const A = point.x - x1;
+            const B = point.y - y1;
+            const C = x2 - x1;
+            const D = y2 - y1;
+
+            const dot = A * C + B * D;
+            const lenSq = C * C + D * D;
+            const param = lenSq !== 0 ? dot / lenSq : -1;
+
+            let xx, yy;
+
+            if (param < 0) {
+              xx = x1;
+              yy = y1;
+            } else if (param > 1) {
+              xx = x2;
+              yy = y2;
+            } else {
+              xx = x1 + param * C;
+              yy = y1 + param * D;
+            }
+
+            const dx = point.x - xx;
+            const dy = point.y - yy;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance < el.lineWidth + 5) {
+              return true;
+            }
+          }
+          return false;
         } else {
+          // Door, Window, Camera - point-based elements
           const dx = point.x - (el.x + panOffset.x);
           const dy = point.y - (el.y + panOffset.y);
           return Math.sqrt(dx * dx + dy * dy) < 20;
@@ -291,6 +470,17 @@ export function FloorPlanCanvas({ selectedTool, elements, onElementsChange, sele
       setIsDrawing(true);
       setStartPoint(snapped);
       setCurrentPoint(snapped);
+    } else if (selectedTool === 'wall') {
+      const snapped = snapToGrid({ x: point.x - panOffset.x, y: point.y - panOffset.y });
+      setIsDrawing(true);
+      setStartPoint(snapped);
+      setCurrentPoint(snapped);
+    } else if (selectedTool === 'pencil') {
+      const unsnapped = { x: point.x - panOffset.x, y: point.y - panOffset.y };
+      setIsDrawing(true);
+      setStartPoint(unsnapped);
+      setCurrentPoint(unsnapped);
+      setPencilPoints([unsnapped]); // Initialize with first point
     } else if (selectedTool === 'door' || selectedTool === 'window' || selectedTool === 'camera') {
       const snapped = snapToGrid({ x: point.x - panOffset.x, y: point.y - panOffset.y });
       const newElement: FloorPlanElement =
@@ -319,6 +509,13 @@ export function FloorPlanCanvas({ selectedTool, elements, onElementsChange, sele
     if (isDrawing && startPoint && selectedTool === 'room') {
       const snapped = snapToGrid({ x: point.x - panOffset.x, y: point.y - panOffset.y });
       setCurrentPoint(snapped);
+    } else if (isDrawing && startPoint && selectedTool === 'wall') {
+      const snapped = snapToGrid({ x: point.x - panOffset.x, y: point.y - panOffset.y });
+      setCurrentPoint(snapped);
+    } else if (isDrawing && selectedTool === 'pencil') {
+      const unsnapped = { x: point.x - panOffset.x, y: point.y - panOffset.y };
+      setPencilPoints((prev) => [...prev, unsnapped]);
+      setCurrentPoint(unsnapped);
     }
   };
 
@@ -349,6 +546,49 @@ export function FloorPlanCanvas({ selectedTool, elements, onElementsChange, sele
       setIsDrawing(false);
       setStartPoint(null);
       setCurrentPoint(null);
+    } else if (isDrawing && startPoint && currentPoint && selectedTool === 'wall') {
+      const dx = currentPoint.x - startPoint.x;
+      const dy = currentPoint.y - startPoint.y;
+      const length = Math.sqrt(dx * dx + dy * dy);
+
+      if (length > GRID_SIZE) {
+        const newWall: Wall = {
+          id: Date.now().toString(),
+          type: 'wall',
+          x1: startPoint.x,
+          y1: startPoint.y,
+          x2: currentPoint.x,
+          y2: currentPoint.y,
+          thickness: 2,
+        };
+
+        onElementsChange([...elements, newWall]);
+      }
+
+      setIsDrawing(false);
+      setStartPoint(null);
+      setCurrentPoint(null);
+    } else if (isDrawing && selectedTool === 'pencil' && pencilPoints.length > 2) {
+      const newPath: PencilPath = {
+        id: Date.now().toString(),
+        type: 'pencil',
+        points: pencilPoints,
+        color: '#60a5fa',
+        lineWidth: 2,
+      };
+
+      onElementsChange([...elements, newPath]);
+
+      setIsDrawing(false);
+      setStartPoint(null);
+      setCurrentPoint(null);
+      setPencilPoints([]);
+    } else if (isDrawing) {
+      // Reset drawing state if conditions not met
+      setIsDrawing(false);
+      setStartPoint(null);
+      setCurrentPoint(null);
+      setPencilPoints([]);
     }
   };
 
