@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { FloorPlanCanvas, FloorPlanElement, Tool } from './components/FloorPlanCanvas';
+import { FloorPlanCanvas } from './components/FloorPlanCanvas';
+import type { FloorPlanElement, Tool } from './types/floorplan';
 import { Toolbar } from './components/Toolbar';
 import { PropertiesPanel } from './components/PropertiesPanel';
 

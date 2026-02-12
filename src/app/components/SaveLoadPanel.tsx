@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Download, Upload, Save, FolderOpen } from 'lucide-react';
 import { Button } from './ui/button';
-import { FloorPlanElement } from './FloorPlanCanvas';
+import type { FloorPlanElement } from '../types/floorplan';
 import {
   Dialog,
   DialogContent,

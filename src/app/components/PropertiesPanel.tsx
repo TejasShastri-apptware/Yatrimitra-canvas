@@ -1,5 +1,5 @@
 import React from 'react';
-import { FloorPlanElement } from './FloorPlanCanvas';
+import type { FloorPlanElement } from '../types/floorplan';
 import { Card } from './ui/card';
 import { Label } from './ui/label';
 import { Input } from './ui/input';
@@ -35,25 +35,29 @@ export function PropertiesPanel({ selectedElement, onUpdateElement }: Properties
       </h3>
 
       <div className="space-y-4">
-        <div>
-          <Label className="text-slate-300 text-xs mb-1">X Position</Label>
-          <Input
-            type="number"
-            value={Math.round(selectedElement.x)}
-            onChange={(e) => handleChange('x', Number(e.target.value))}
-            className="bg-slate-800 border-slate-700 text-white"
-          />
-        </div>
+        {selectedElement.type !== 'wall' && selectedElement.type !== 'pencil' && 'x' in selectedElement && (
+          <>
+            <div>
+              <Label className="text-slate-300 text-xs mb-1">X Position</Label>
+              <Input
+                type="number"
+                value={Math.round(selectedElement.x)}
+                onChange={(e) => handleChange('x', Number(e.target.value))}
+                className="bg-slate-800 border-slate-700 text-white"
+              />
+            </div>
 
-        <div>
-          <Label className="text-slate-300 text-xs mb-1">Y Position</Label>
-          <Input
-            type="number"
-            value={Math.round(selectedElement.y)}
-            onChange={(e) => handleChange('y', Number(e.target.value))}
-            className="bg-slate-800 border-slate-700 text-white"
-          />
-        </div>
+            <div>
+              <Label className="text-slate-300 text-xs mb-1">Y Position</Label>
+              <Input
+                type="number"
+                value={Math.round(selectedElement.y)}
+                onChange={(e) => handleChange('y', Number(e.target.value))}
+                className="bg-slate-800 border-slate-700 text-white"
+              />
+            </div>
+          </>
+        )}
 
         {selectedElement.type === 'room' && (
           <>
@@ -79,20 +83,59 @@ export function PropertiesPanel({ selectedElement, onUpdateElement }: Properties
           </>
         )}
 
-        {(selectedElement.type === 'door' ||
-          selectedElement.type === 'window' ||
-          selectedElement.type === 'camera') && (
+        {selectedElement.type === 'wall' && (
           <div>
-            <Label className="text-slate-300 text-xs mb-1">Rotation (degrees)</Label>
+            <Label className="text-slate-300 text-xs mb-1">Thickness</Label>
             <Input
               type="number"
-              value={Math.round(selectedElement.rotation)}
-              onChange={(e) => handleChange('rotation', Number(e.target.value))}
+              value={Math.round(selectedElement.thickness)}
+              onChange={(e) => handleChange('thickness', Number(e.target.value))}
               className="bg-slate-800 border-slate-700 text-white"
-              step={45}
+              min={1}
+              max={20}
             />
           </div>
         )}
+
+        {selectedElement.type === 'pencil' && (
+          <>
+            <div>
+              <Label className="text-slate-300 text-xs mb-1">Line Width</Label>
+              <Input
+                type="number"
+                value={Math.round(selectedElement.lineWidth)}
+                onChange={(e) => handleChange('lineWidth', Number(e.target.value))}
+                className="bg-slate-800 border-slate-700 text-white"
+                min={1}
+                max={10}
+              />
+            </div>
+            <div>
+              <Label className="text-slate-300 text-xs mb-1">Color</Label>
+              <Input
+                type="color"
+                value={selectedElement.color}
+                onChange={(e) => onUpdateElement({ ...selectedElement, color: e.target.value })}
+                className="bg-slate-800 border-slate-700 h-10"
+              />
+            </div>
+          </>
+        )}
+
+        {(selectedElement.type === 'door' ||
+          selectedElement.type === 'window' ||
+          selectedElement.type === 'camera') && (
+            <div>
+              <Label className="text-slate-300 text-xs mb-1">Rotation (degrees)</Label>
+              <Input
+                type="number"
+                value={Math.round(selectedElement.rotation)}
+                onChange={(e) => handleChange('rotation', Number(e.target.value))}
+                className="bg-slate-800 border-slate-700 text-white"
+                step={45}
+              />
+            </div>
+          )}
 
         <div className="pt-2 border-t border-slate-700">
           <div className="text-xs text-slate-400">

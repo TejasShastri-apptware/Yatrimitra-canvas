@@ -1,6 +1,6 @@
 import React from 'react';
 import { Square, DoorOpen, Maximize2, Camera, MousePointer2, Hand, Trash2, RotateCw, Minus, Pencil } from 'lucide-react';
-import { Tool, FloorPlanElement } from './FloorPlanCanvas';
+import type { Tool, FloorPlanElement } from '../types/floorplan';
 import { Button } from './ui/button';
 import { Separator } from './ui/separator';
 import { SaveLoadPanel } from './SaveLoadPanel';
@@ -39,8 +39,8 @@ export function Toolbar({ selectedTool, onToolChange, onClear, onRotateSelected,
               size="sm"
               onClick={() => onToolChange(tool.id)}
               className={`relative ${selectedTool === tool.id
-                  ? 'bg-blue-600 hover:bg-blue-700 text-white'
-                  : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                : 'text-slate-300 hover:text-white hover:bg-slate-800'
                 }`}
               title={`${tool.label} (${tool.shortcut})`}
             >
