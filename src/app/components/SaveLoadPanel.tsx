@@ -226,24 +226,25 @@ export function SaveLoadPanel({ elements, onLoadElements }: SaveLoadPanelProps) 
       </Button>
 
       {/* Import from File */}
-      <Button
-        variant="ghost"
-        size="sm"
-        className="text-slate-300 hover:text-white hover:bg-slate-800"
-        title="Import from JSON file"
-        asChild
-      >
-        <label>
+      <div className="relative">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="text-slate-300 hover:text-white hover:bg-slate-800"
+          title="Import from JSON file"
+          onClick={() => document.getElementById('file-import-input')?.click()}
+        >
           <Upload className="h-4 w-4" />
           <span className="ml-2">Import</span>
-          <input
-            type="file"
-            accept=".json"
-            onChange={handleImportFromFile}
-            className="hidden"
-          />
-        </label>
-      </Button>
+        </Button>
+        <input
+          id="file-import-input"
+          type="file"
+          accept=".json"
+          onChange={handleImportFromFile}
+          className="hidden"
+        />
+      </div>
     </div>
   );
 }
