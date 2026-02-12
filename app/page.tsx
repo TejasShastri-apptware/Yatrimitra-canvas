@@ -127,7 +127,7 @@ export default function FloorPlanCanvas() {
         />
       </div>
 
-      <Instructions />
+      {/* <Instructions /> */}
     </div>
   );
 }

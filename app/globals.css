@@ -5,41 +5,48 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-  /* Professional Color Palette */
-  --color-primary-600: #2563eb;
-  --color-primary-700: #1d4ed8;
-  --color-primary-500: #3b82f6;
-  --color-primary-400: #60a5fa;
-  
-  --color-accent-500: #10b981;
-  --color-accent-600: #059669;
-  
+  /* Contrast Inversion Theme - Dark Navy & Yellow */
+  --color-primary-yellow: #f5f84b;
+  --color-primary-yellow-dark: #d4d63a;
+  --color-primary-yellow-light: #f9fb7a;
+
+  --color-secondary-blue: #046fa4;
+  --color-secondary-blue-dark: #035580;
+  --color-secondary-blue-light: #0589c9;
+
+  --color-dark-navy: #1a2332;
+  --color-dark-navy-light: #2a3545;
+  --color-dark-navy-lighter: #3a4555;
+
   --color-slate-50: #f8fafc;
   --color-slate-100: #f1f5f9;
   --color-slate-200: #e2e8f0;
   --color-slate-300: #cbd5e1;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #64748b;
   --color-slate-600: #475569;
   --color-slate-700: #334155;
   --color-slate-800: #1e293b;
   --color-slate-900: #0f172a;
-  
-  /* Canvas */
-  --color-canvas-bg: #ffffff;
-  --color-canvas-grid: #e5e7eb;
-  
-  /* Shadows - Enhanced */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
-  --shadow-glow: 0 0 20px rgba(37, 99, 235, 0.3);
-  
+
+  /* Canvas Colors */
+  --color-canvas-bg: #046fa4;
+  --color-canvas-grid: #f5f84b;
+
+  /* Shadows - Enhanced for dark theme */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.5), 0 8px 10px -6px rgb(0 0 0 / 0.4);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.6);
+  --shadow-glow-yellow: 0 0 20px rgba(245, 248, 75, 0.4);
+  --shadow-glow-blue: 0 0 20px rgba(4, 111, 164, 0.4);
+
   /* Gradients */
-  --gradient-primary: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
-  --gradient-accent: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  --gradient-bg: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
-  --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
+  --gradient-primary: linear-gradient(135deg, #f5f84b 0%, #d4d63a 100%);
+  --gradient-secondary: linear-gradient(135deg, #046fa4 0%, #035580 100%);
+  --gradient-bg: linear-gradient(180deg, #0f1419 0%, #1a2332 100%);
+  --gradient-glass-dark: linear-gradient(135deg, rgba(26, 35, 50, 0.9) 0%, rgba(26, 35, 50, 0.7) 100%);
 }
 
 * {
@@ -57,28 +64,28 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Glassmorphism Effects */
+/* Glassmorphism Effects - Dark Theme */
 .glass {
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(26, 35, 50, 0.85);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  border: 1px solid rgba(245, 248, 75, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
 }
 
 .glass-strong {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(26, 35, 50, 0.95);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+  border: 1px solid rgba(245, 248, 75, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
 }
 
 .glass-dark {
-  background: rgba(15, 23, 42, 0.7);
+  background: rgba(15, 20, 30, 0.9);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(4, 111, 164, 0.3);
 }
 
 /* Gradient Backgrounds */
@@ -86,8 +93,8 @@ body {
   background: var(--gradient-primary);
 }
 
-.bg-gradient-accent {
-  background: var(--gradient-accent);
+.bg-gradient-secondary {
+  background: var(--gradient-secondary);
 }
 
 .bg-gradient-page {
@@ -125,20 +132,20 @@ body {
 
 /* Floating Panel */
 .floating-panel {
-  background: white;
+  background: var(--color-dark-navy);
   border-radius: 16px;
   box-shadow: var(--shadow-xl);
-  border: 1px solid var(--color-slate-200);
+  border: 1px solid rgba(245, 248, 75, 0.2);
 }
 
 /* Elevated Card */
 .elevated-card {
-  background: white;
+  background: var(--color-dark-navy-light);
   border-radius: 20px;
-  box-shadow: 
-    0 0 0 1px rgba(0, 0, 0, 0.05),
-    0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow:
+    0 0 0 1px rgba(245, 248, 75, 0.1),
+    0 10px 15px -3px rgba(0, 0, 0, 0.5),
+    0 4px 6px -2px rgba(0, 0, 0, 0.3);
 }
 
 /* Custom Scrollbar */
@@ -168,6 +175,7 @@ body {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -179,6 +187,7 @@ body {
     opacity: 0;
     transform: translateX(20px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -186,9 +195,12 @@ body {
 }
 
 @keyframes pulse-glow {
-  0%, 100% {
+
+  0%,
+  100% {
     box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4);
   }
+
   50% {
     box-shadow: 0 0 0 8px rgba(37, 99, 235, 0);
   }

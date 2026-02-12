@@ -6,52 +6,52 @@ import { fabric } from 'fabric';
 import type { CanvasConfig } from '../types/canvas.types';
 
 /**
- * Default canvas configuration
+ * Default canvas configuration - Blueprint Style
  */
 export const DEFAULT_CANVAS_CONFIG: CanvasConfig = {
     width: 1200,
     height: 700,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#046fa4ff', // Deep blueprint blue
     gridSize: 20,
-    gridColor: '#d1d5db',
+    gridColor: '#f5f84bff', // Cyan grid dots
 };
 
 /**
- * Default wall drawing options
+ * Default wall drawing options - Blueprint Style
  */
 export const DEFAULT_WALL_OPTIONS = {
-    stroke: '#1f2937',
+    stroke: '#FFFFFF', // White walls for blueprint aesthetic
     strokeWidth: 3,
     strokeLineCap: 'round' as const,
     strokeLineJoin: 'round' as const,
 };
 
 /**
- * Default room drawing options
+ * Default room drawing options - Blueprint Style
  */
 export const DEFAULT_ROOM_OPTIONS = {
-    fill: 'rgba(147, 197, 253, 0.15)',
-    stroke: '#3b82f6',
+    fill: 'rgba(74, 144, 217, 0.15)', // Subtle cyan fill
+    stroke: '#6BB6FF', // Bright cyan outline
     strokeWidth: 2,
     rx: 4,
     ry: 4,
 };
 
 /**
- * Default camera drawing options
+ * Default camera drawing options - Blueprint Style
  */
 export const DEFAULT_CAMERA_OPTIONS = {
-    fill: '#ef4444',
-    stroke: '#991b1b',
+    fill: '#FFD700', // Gold/yellow for visibility
+    stroke: '#FFA500', // Orange outline
     strokeWidth: 2,
     radius: 20,
 };
 
 /**
- * Default door drawing options
+ * Default door drawing options - Blueprint Style
  */
 export const DEFAULT_DOOR_OPTIONS = {
-    stroke: '#8b5cf6',
+    stroke: '#90EE90', // Light green for doors
     strokeWidth: 3,
     strokeLineCap: 'round' as const,
 };
@@ -70,13 +70,13 @@ export const addGrid = (
     const width = canvas.width || DEFAULT_CANVAS_CONFIG.width;
     const height = canvas.height || DEFAULT_CANVAS_CONFIG.height;
 
-    // Add grid dots instead of lines for a more professional look
+    // Add grid dots for blueprint aesthetic
     for (let i = 0; i < width / gridSize; i++) {
         for (let j = 0; j < height / gridSize; j++) {
             const dot = new fabric.Circle({
                 left: i * gridSize,
                 top: j * gridSize,
-                radius: 1,
+                radius: 0.5, // Slightly larger for visibility on blue background
                 fill: gridColor,
                 selectable: false,
                 evented: false,
@@ -95,7 +95,7 @@ export const clearCanvas = (canvas: fabric.Canvas): void => {
 
     // Remove all objects except grid dots
     objects.forEach((obj) => {
-        if (obj.type !== 'circle' || (obj as fabric.Circle).radius !== 1) {
+        if (obj.type !== 'circle' || (obj as fabric.Circle).radius !== 1.5) {
             canvas.remove(obj);
         }
     });
@@ -121,5 +121,5 @@ export const deleteSelected = (canvas: fabric.Canvas): void => {
  * @returns True if the object is a grid dot
  */
 export const isGridDot = (obj: fabric.Object): boolean => {
-    return obj.type === 'circle' && (obj as fabric.Circle).radius === 1;
+    return obj.type === 'circle' && (obj as fabric.Circle).radius === 1.5;
 };
