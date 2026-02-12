@@ -23,4 +23,5 @@ export const COLORS = {
     pencil: '#60a5fa',
     selected: '#60a5fa',
     label: '#93c5fd',
+    roomName: '#fde047', // Bright yellow for room names
 } as const;

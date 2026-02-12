@@ -62,16 +62,25 @@ export function drawRoom(
     ctx.fillRect(room.x + panOffset.x, room.y + panOffset.y, room.width, room.height);
     ctx.strokeRect(room.x + panOffset.x, room.y + panOffset.y, room.width, room.height);
 
+    const centerX = room.x + panOffset.x + room.width / 2;
+    const centerY = room.y + panOffset.y + room.height / 2;
+
+    // Add room name in bright yellow if it exists
+    if (room.name) {
+        ctx.fillStyle = COLORS.roomName;
+        ctx.font = 'bold 14px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(room.name, centerX, centerY - 10);
+    }
+
     // Add dimension labels
     ctx.fillStyle = COLORS.label;
     ctx.font = '12px monospace';
     ctx.textAlign = 'center';
-    const centerX = room.x + panOffset.x + room.width / 2;
-    const centerY = room.y + panOffset.y + room.height / 2;
     ctx.fillText(
         `${Math.abs(Math.round(room.width / GRID_SIZE))}x${Math.abs(Math.round(room.height / GRID_SIZE))}`,
         centerX,
-        centerY
+        room.name ? centerY + 10 : centerY
     );
 }
 

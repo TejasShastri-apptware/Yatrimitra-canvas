@@ -62,6 +62,17 @@ export function PropertiesPanel({ selectedElement, onUpdateElement }: Properties
         {selectedElement.type === 'room' && (
           <>
             <div>
+              <Label className="text-slate-300 text-xs mb-1">Room Name</Label>
+              <Input
+                type="text"
+                value={selectedElement.name || ''}
+                onChange={(e) => onUpdateElement({ ...selectedElement, name: e.target.value })}
+                placeholder="e.g., Living Room"
+                className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-500"
+              />
+            </div>
+
+            <div>
               <Label className="text-slate-300 text-xs mb-1">Width</Label>
               <Input
                 type="number"

@@ -16,6 +16,7 @@ export interface Room {
     y: number;
     width: number;
     height: number;
+    name?: string;
 }
 
 export interface Door {
