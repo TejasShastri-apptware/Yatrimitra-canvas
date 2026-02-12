@@ -83,7 +83,7 @@ export function FloorPlanCanvas({ selectedTool, elements, onElementsChange, sele
     // Draw grid
     ctx.strokeStyle = '#1e3a5f';
     ctx.lineWidth = 1;
-    
+
     for (let x = panOffset.x % GRID_SIZE; x < canvas.width; x += GRID_SIZE) {
       ctx.beginPath();
       ctx.moveTo(x, 0);
@@ -101,7 +101,7 @@ export function FloorPlanCanvas({ selectedTool, elements, onElementsChange, sele
     // Draw all elements
     elements.forEach((element) => {
       const isSelected = element.id === selectedElement;
-      
+
       if (element.type === 'room') {
         drawRoom(ctx, element, isSelected);
       } else if (element.type === 'door') {
@@ -117,7 +117,7 @@ export function FloorPlanCanvas({ selectedTool, elements, onElementsChange, sele
     if (isDrawing && startPoint && currentPoint && selectedTool === 'room') {
       const width = currentPoint.x - startPoint.x;
       const height = currentPoint.y - startPoint.y;
-      
+
       ctx.strokeStyle = '#60a5fa';
       ctx.fillStyle = 'rgba(96, 165, 250, 0.1)';
       ctx.lineWidth = 2;
@@ -132,10 +132,10 @@ export function FloorPlanCanvas({ selectedTool, elements, onElementsChange, sele
     ctx.strokeStyle = isSelected ? '#60a5fa' : '#3b82f6';
     ctx.fillStyle = 'rgba(59, 130, 246, 0.1)';
     ctx.lineWidth = isSelected ? 3 : 2;
-    
+
     ctx.fillRect(room.x + panOffset.x, room.y + panOffset.y, room.width, room.height);
     ctx.strokeRect(room.x + panOffset.x, room.y + panOffset.y, room.width, room.height);
-    
+
     // Add dimension labels
     ctx.fillStyle = '#93c5fd';
     ctx.font = '12px monospace';
@@ -149,7 +149,7 @@ export function FloorPlanCanvas({ selectedTool, elements, onElementsChange, sele
     ctx.save();
     ctx.translate(door.x + panOffset.x, door.y + panOffset.y);
     ctx.rotate((door.rotation * Math.PI) / 180);
-    
+
     // Door frame
     ctx.strokeStyle = isSelected ? '#60a5fa' : '#8b5cf6';
     ctx.lineWidth = isSelected ? 3 : 2;
@@ -157,14 +157,14 @@ export function FloorPlanCanvas({ selectedTool, elements, onElementsChange, sele
     ctx.moveTo(-DOOR_SIZE / 2, 0);
     ctx.lineTo(DOOR_SIZE / 2, 0);
     ctx.stroke();
-    
+
     // Door arc
     ctx.strokeStyle = isSelected ? 'rgba(96, 165, 250, 0.6)' : 'rgba(139, 92, 246, 0.5)';
     ctx.lineWidth = 1.5;
     ctx.beginPath();
     ctx.arc(-DOOR_SIZE / 2, 0, DOOR_SIZE, 0, Math.PI / 2);
     ctx.stroke();
-    
+
     // Selection circle
     if (isSelected) {
       ctx.fillStyle = '#60a5fa';
@@ -172,7 +172,7 @@ export function FloorPlanCanvas({ selectedTool, elements, onElementsChange, sele
       ctx.arc(0, 0, 4, 0, Math.PI * 2);
       ctx.fill();
     }
-    
+
     ctx.restore();
   };
 
@@ -180,21 +180,21 @@ export function FloorPlanCanvas({ selectedTool, elements, onElementsChange, sele
     ctx.save();
     ctx.translate(window.x + panOffset.x, window.y + panOffset.y);
     ctx.rotate((window.rotation * Math.PI) / 180);
-    
+
     // Window frame
     ctx.strokeStyle = isSelected ? '#60a5fa' : '#06b6d4';
     ctx.lineWidth = isSelected ? 3 : 2;
     ctx.fillStyle = 'rgba(6, 182, 212, 0.2)';
-    
+
     ctx.fillRect(-WINDOW_SIZE / 2, -3, WINDOW_SIZE, 6);
     ctx.strokeRect(-WINDOW_SIZE / 2, -3, WINDOW_SIZE, 6);
-    
+
     // Window divider
     ctx.beginPath();
     ctx.moveTo(0, -3);
     ctx.lineTo(0, 3);
     ctx.stroke();
-    
+
     // Selection circle
     if (isSelected) {
       ctx.fillStyle = '#60a5fa';
@@ -202,7 +202,7 @@ export function FloorPlanCanvas({ selectedTool, elements, onElementsChange, sele
       ctx.arc(0, 0, 4, 0, Math.PI * 2);
       ctx.fill();
     }
-    
+
     ctx.restore();
   };
 
@@ -210,7 +210,7 @@ export function FloorPlanCanvas({ selectedTool, elements, onElementsChange, sele
     ctx.save();
     ctx.translate(camera.x + panOffset.x, camera.y + panOffset.y);
     ctx.rotate((camera.rotation * Math.PI) / 180);
-    
+
     // Camera view cone
     ctx.fillStyle = isSelected ? 'rgba(96, 165, 250, 0.15)' : 'rgba(34, 197, 94, 0.1)';
     ctx.strokeStyle = isSelected ? 'rgba(96, 165, 250, 0.4)' : 'rgba(34, 197, 94, 0.3)';
@@ -222,19 +222,19 @@ export function FloorPlanCanvas({ selectedTool, elements, onElementsChange, sele
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
-    
+
     // Camera body
     ctx.fillStyle = isSelected ? '#60a5fa' : '#22c55e';
     ctx.beginPath();
     ctx.arc(0, 0, CAMERA_SIZE / 3, 0, Math.PI * 2);
     ctx.fill();
-    
+
     // Camera lens
     ctx.fillStyle = '#0a1929';
     ctx.beginPath();
     ctx.arc(0, 0, CAMERA_SIZE / 6, 0, Math.PI * 2);
     ctx.fill();
-    
+
     ctx.restore();
   };
 
@@ -297,8 +297,8 @@ export function FloorPlanCanvas({ selectedTool, elements, onElementsChange, sele
         selectedTool === 'door'
           ? { id: Date.now().toString(), type: 'door', x: snapped.x, y: snapped.y, rotation: 0 }
           : selectedTool === 'window'
-          ? { id: Date.now().toString(), type: 'window', x: snapped.x, y: snapped.y, rotation: 0 }
-          : { id: Date.now().toString(), type: 'camera', x: snapped.x, y: snapped.y, rotation: 0 };
+            ? { id: Date.now().toString(), type: 'window', x: snapped.x, y: snapped.y, rotation: 0 }
+            : { id: Date.now().toString(), type: 'camera', x: snapped.x, y: snapped.y, rotation: 0 };
 
       onElementsChange([...elements, newElement]);
     }
